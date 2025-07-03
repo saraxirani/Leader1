@@ -1,0 +1,40 @@
+name: Run Twitter Bot
+
+on:
+  schedule:
+    # Runs every 2 hours. 90 minutes is not a standard cron schedule.
+    # This is a reliable alternative. You can adjust this cron schedule.
+    - cron: '0 */2 * * *'
+  workflow_dispatch: # Allows you to run this workflow manually from the Actions tab
+
+jobs:
+  run-bot:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Create acc.txt from secrets
+        env:
+          API_KEY: ${{ secrets.API_KEY }}
+          API_KEY_SECRET: ${{ secrets.API_KEY_SECRET }}
+          ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+          ACCESS_TOKEN_SECRET: ${{ secrets.ACCESS_TOKEN_SECRET }}
+          BEARER_TOKEN: ${{ secrets.BEARER_TOKEN }}
+        run: |
+          echo $API_KEY > acc.txt
+          echo $API_KEY_SECRET >> acc.txt
+          echo $ACCESS_TOKEN >> acc.txt
+          echo $ACCESS_TOKEN_SECRET >> acc.txt
+          echo $BEARER_TOKEN >> acc.txt
+
+      - name: Run Twitter Bot
+        run: node index.js
