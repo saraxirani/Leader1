@@ -2,9 +2,11 @@ name: Run Twitter Bot
 
 on:
   schedule:
-    # Runs every 2 hours. 90 minutes is not a standard cron schedule.
-    # This is a reliable alternative. You can adjust this cron schedule.
-    - cron: '0 */2 * * *'
+    # Runs approximately every 90 minutes (1.5 hours).
+    # Standard cron doesn't support intervals like 'every 95 minutes',
+    # so this is the closest reliable schedule.
+    - cron: '0 0,3,6,9,12,15,18,21 * * *'
+    - cron: '30 1,4,7,10,13,16,19,22 * * *'
   workflow_dispatch: # Allows you to run this workflow manually from the Actions tab
 
 jobs:
